@@ -1,0 +1,67 @@
+CC = nvcc
+BUILD ?= ./
+BIN ?= ./
+TGT ?= solver
+export PATH := $(PATH):/opt/cuda-10.0/bin
+
+SRC = $(wildcard *.cc)
+SRU = $(wildcard *.cu)
+
+CCPT = -Wall -Werror
+LCPT = -Wall -Werror
+SLOC = -O0
+FASC = -Ofast
+DEBC = -D DEBUG -g
+TIMC = -D TIMES
+LOPT = $(foreach option, $(LCPT), -Xcompiler $(option)) -arch=sm_60
+COPT = $(foreach option, $(CCPT), -Xcompiler $(option)) -arch=sm_60
+SLOW = $(foreach option, $(SLOC), -Xcompiler $(option))
+FAST = $(foreach option, $(FASC), -Xcompiler $(option))
+DEBU = $(foreach option, $(DEBC), -Xcompiler $(option))
+TIME = $(foreach option, $(TIMC), -Xcompiler $(option))
+
+OBJ = $(addprefix ${BUILD}/final/, $(patsubst %.cc,%.o, ${SRC}))
+OCJ = $(addprefix ${BUILD}/final/, $(patsubst %.cu,%.o, ${SRU}))
+
+OBT = $(addprefix ${BUILD}/times/, $(patsubst %.cc,%.o, ${SRC}))
+OCT = $(addprefix ${BUILD}/times/, $(patsubst %.cu,%.o, ${SRU}))
+
+OBD = $(addprefix ${BUILD}/debug/, $(patsubst %.cc,%.o, ${SRC}))
+OCD = $(addprefix ${BUILD}/debug/, $(patsubst %.cu,%.o, ${SRU}))
+
+OUP = $(BIN)/final/$(TGT)
+OUD = $(BIN)/debug/$(TGT)
+OUT = $(BIN)/times/$(TGT)
+
+final: $(OUP)
+
+debug: $(OUD)
+
+times: $(OUT)
+
+$(OUP): $(OBJ) $(OCJ)
+	$(CC) $(LOPT) $(FAST) 				$(CBJ) $< -o $@
+
+$(OUD): $(OBD) $(OCD)
+	$(CC) $(LOPT) $(SLOW) 				$(CBD) $< -o $@
+
+$(OUT): $(OBT) $(OCT)
+	$(CC) $(LOPT) $(FAST) $(TIME) $(CBT) $< -o $@
+
+$(OBJ): $(BUILD)/final/%.o : %.cc
+	$(CC) $(COPT) $(FAST) -c $< -o $@
+
+$(OBD): $(BUILD)/debug/%.o : %.cc
+	$(CC) $(COPT) $(SLOW) $(DEBU) -c $< -o $@
+
+$(OBT): $(BUILD)/times/%.o : %.cc
+	$(CC) $(COPT) $(FAST) $(TIME) -c $< -o $@
+
+$(OCJ): $(BUILD)/final/%.o : %.cu
+	$(CC) $(COPT) $(FAST) -c $< -o $@
+
+$(OCD): $(BUILD)/debug/%.o : %.cu
+	$(CC) $(COPT) $(SLOW) $(DEBU) -c $< -o $@
+
+$(OCT): $(BUILD)/times/%.o : %.cu
+	$(CC) $(COPT) $(FAST) $(TIME) -c $< -o $@
