@@ -1,0 +1,10 @@
+find_package(CUDAToolkit)
+
+if(CUDAToolkit_FOUND)
+  enable_Language(CUDA)
+  AUX_SOURCE_DIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/gpu sim_src)
+else()
+  AUX_SOURCE_DIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/cpu sim_src)
+endif()
+add_library(sim STATIC ${sim_src})
+target_include_directories(sim PUBLIC ${CMAKE_SOURCE_DIR}/include/lib)
