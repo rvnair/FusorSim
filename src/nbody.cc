@@ -1,5 +1,6 @@
 #include <getopt.h>
-#include <nbody.h>
+#include "nbody.h"
+#include "gpu/repeat_iterator.h"
 
 void parseInput(input* in, int argc, char** argv)
 {

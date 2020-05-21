@@ -8,7 +8,7 @@ struct real_v
   double vals[3];
 };
 
-constexpr REAL_V_DIM = 3;
+constexpr unsigned int REAL_V_DIM = 3;
 struct output
 {
   uint64  step;
