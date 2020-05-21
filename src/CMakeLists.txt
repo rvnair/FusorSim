@@ -17,5 +17,5 @@ foreach(target IN LISTS ${targets})
   TARGET_LINK_LIBRARIES(${target} sim)
   #TARGET_LINK_LIBRARIES(${target} vis)
 
-  TARGET_INCLUDE_DIRECTORIES(${target} PRIVATE "${CMAKE_SOURCE_DIR}/include/src")
+  TARGET_INCLUDE_DIRECTORIES(${target} PRIVATE "${CMAKE_SOURCE_DIR}/inc/src")
 endforeach()

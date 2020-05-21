@@ -32,26 +32,34 @@ void parseInput(input* in, int argc, char** argv)
   }
 }
 
+void printer(output out)
+{
+  printf("Timestep:\t%llu\n", step);
+  for(uint64 j = 0; j < out.numb)
+  {
+    printf("\tParticle %llu: %lf %lf %lf", j, out[i].part[j].x, out[i].part[j].y, out[i].part[j].z);
+  }
+}
+
 int main(int argc, char** argv)
 {
   intput in;
   parseInput(&in, argc, argv);
 
-  locate* p = aligned_alloc(ALLOC_ALIGN, sizeof(locate) * in.part);
-  locate* v = aligned_alloc(ALLOC_ALIGN, sizeof(locate) * in.part);
+  real_v* q = aligned_alloc(ALLOC_ALIGN, sizeof(locate) * in.part);
+  real_v* v = aligned_alloc(ALLOC_ALIGN, sizeof(locate) * in.part);
   double* m = aligned_alloc(ALLOC_ALIGN, sizeof(double) * in.part);
-  double* q = aligned_alloc(ALLOC_ALIGN, sizeof(double) * in.part);
-
-  output* out = n_body_eval(p, v, m, q, in.elec, in.radi, in.time, in.numb, in.part);
-
-  printf("The timestep is %lf\n", in.time);
-  for(int i = 0; i < in.numb; i++)
+  double* c = aligned_alloc(ALLOC_ALIGN, sizeof(double) * in.part);
+  // The input file stream should have particles in q0 q1 q2 v0 v1 v2 m c
+  std::ifstream inf(in.file);
+  for(int i = 0; i < N; i++)
   {
-    printf("Timestep:\t%llu\n", out[i].step);
-    for(uint64 j = 0; j < in.part)
-    {
-      printf("\tParticle %llu: %lf %lf %lf", j, out[i].part[j].x, out[i].part[j].y, out[i].part[j].z);
-    }
+    for(int j = 0; j < REAL_V_DIM; j++) inf >> q[i].vals[j];
+    for(int j = 0; j < REAL_V_DIM; j++) inf >> v[i].vals[j];
+    inf >> m[i];
+    inf >> c[i];
   }
+  printf("The timestep is %lf\n", in.time);
+  n_body_eval(q, v, m, c, in.elec, in.radi, in.time, in.numb, in.part, printer);
   return 0;
 }
