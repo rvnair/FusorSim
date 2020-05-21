@@ -1,7 +1,9 @@
 #ifndef _nbody_h_
 #define _nbody_h_
-#include <locate.h>
-#include <ifstream>
+#include <fstream>
+#include <getopt.h>
+#include "real_v.h"
+#include "sim.h"
 
 struct input
 {
