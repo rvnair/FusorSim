@@ -7,7 +7,7 @@ cd build
 cmake ..
 make -j
 ```
-
+Please note that right now building requires CUDA as the CPU only implementations are still in the works.
 All binaries will then be in the build folder.
 
 
