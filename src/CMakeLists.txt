@@ -3,7 +3,7 @@ set(targets nbody)
 foreach(target ${targets})
   message(STATUS "Initialize ${target}")
   add_executable(${target} ${target}.cc)
-  set_property(TARGET ${target} PROPERTY CXX_STANDARD 20)
+  set_property(TARGET ${target} PROPERTY CXX_STANDARD 17)
   set_property(TARGET ${target} PROPERTY RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
   FIND_PACKAGE(Threads REQUIRED)
