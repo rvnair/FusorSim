@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17.2)
+cmake_minimum_required(VERSION 3.10)
 
 
 project(Fusor-Simulation VERSION 0.1 LANGUAGES CXX)
