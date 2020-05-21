@@ -100,8 +100,8 @@ static void step(real_v* q, real_v* qdot, double* m, double* c, double dt, uint6
   cudaMemcpyAsync(temp_q, q, sizeof(real_v)*N, cudaMemcpyDeviceToHost, s[1]);
   //Update qdot1
   //Compute forces
-  int blah = N*(N+1) /2;
-  int forces_blocks = (blah % GOOD_BLOCK_SIZE) ? (blah / GOOD_BLOCK_SIZE) + 1 : N / GOOD_BLOCK_SIZE;
+  int upper_triangle = N*(N+1) /2;
+  int forces_blocks = (upper_triangle % GOOD_BLOCK_SIZE) ? (upper_triangle / GOOD_BLOCK_SIZE) + 1 : N / GOOD_BLOCK_SIZE;
   compute_forces<<<forces_blocks, forces_thread,0,s[0]>>>(q, c, out, N);
   auto counter = thrust::make_counting_iterator(0);
   auto philled = repeat_iterator<thrust::counting_iterator<int>>(counter, N);

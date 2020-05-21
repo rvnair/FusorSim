@@ -7,12 +7,6 @@ foreach(target ${targets})
   set_property(TARGET ${target} PROPERTY CXX_STANDARD 17)
   set_property(TARGET ${target} PROPERTY RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-  FIND_PACKAGE(glfw3 REQUIRED)
-  TARGET_LINK_LIBRARIES(${target} glfw)
-
-  FIND_PACKAGE(OpenGL REQUIRED)
-  TARGET_LINK_LIBRARIES(${target} OpenGL::GL)
-
   FIND_PACKAGE(Threads REQUIRED)
   TARGET_LINK_LIBRARIES(${target} Threads::Threads)
 
